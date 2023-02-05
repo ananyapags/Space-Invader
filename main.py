@@ -1,19 +1,27 @@
 import pygame, random
 
+
 WIDTH = 650
 HEIGHT = 500
+
+#Creating actors
 rocket = Actor("rocket", (WIDTH/2, HEIGHT - 50))
 shields = []
 x = 50
+
+#intializing sheilds
 
 for i in range(3):
     shield = Rect((x, 350), (120, 40))
     shields.append(shield)
     x += 210
 
+#setting up the enemies 
 enemies = []
 aliens = ["alien2", "alien_ship2", "alien3"]
 alienProjectiles = []
+
+# I used a list data structure to group together the enemies and shields so that they are easier to manipulate
 
 y = 80
 index = 0
@@ -52,9 +60,12 @@ musicOn = True
 
 music.play("tune.mp3")
 
+#main function to set gameplay
 
 def draw():
     screen.clear()
+
+    #the follwing code sets up the screen
 
     if gameState == "play":
         rocket.draw()
@@ -132,11 +143,15 @@ def on_mouse_down(pos):
 def on_key_down(key):
     global fired
 
+    #allows for event listeners in the game
+
     if key == keys.SPACE and not fired:
         fired = True
 
         if soundOn:
             sounds.laser.play()
+
+#group the aliens allowing them to fire at different timings allowing for a more exciting gameplay
 
 def alienFire1():
     if len(enemies) >= 1:
