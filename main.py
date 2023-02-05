@@ -23,6 +23,8 @@ alienProjectiles = []
 
 # I used a list data structure to group together the enemies and shields so that they are easier to manipulate
 
+
+#Place the Obstacles and enemies in an organized fashion on the screen
 y = 80
 index = 0
 for j in range(3):
@@ -37,6 +39,9 @@ for j in range(3):
     enemies.append(row)
     index += 1
     y += 40
+
+
+# create the score variables 
 
 score = 0
 lives = 3
@@ -87,9 +92,11 @@ def draw():
         screen.draw.text("Lives: " + str(lives), center=(50, 20), fontsize=30, color=(255, 255, 255))
         screen.draw.text("Score: " + str(score), center=(50, 50), fontsize=30, color=(255, 255, 255))
 
+#start screen
     elif (gameState == "start"):
         screen.draw.text("Press Enter to Start the Game!", center=(WIDTH/2, HEIGHT/2), fontsize=40, color=(255, 255, 255))
 
+#end screen
     elif (gameState == "end"):
         screen.draw.text("Game Over!\nPress Enter to Play Again \nor Escape to Quit!", center=(WIDTH/2, HEIGHT/2), fontsize=40, color=(255, 255, 255))
 
@@ -104,6 +111,7 @@ def draw():
         screen.draw.filled_rect(quitButton, (147,112,219))
         screen.draw.text("Quit", center=(WIDTH/2, 335), fontsize=30, color=(255, 255, 255))
 
+#creating the mouse event listeners. This will allow the button that we ave created previously to work
 def on_mouse_down(pos):
     global gameState, soundOn, musicOn
 
@@ -121,7 +129,7 @@ def on_mouse_down(pos):
         if quitButton.collidepoint(pos):
             quit()
 
-
+#allowing the user to turn the sound on or off, and adding or deleting music
         if sound.collidepoint(pos):
             if soundOn:
                 sound.image = "no_volume"
@@ -152,7 +160,7 @@ def on_key_down(key):
             sounds.laser.play()
 
 #group the aliens allowing them to fire at different timings allowing for a more exciting gameplay
-
+#UPDATE: I have added in sound affects when the aliens fire. This allows for a more immersive and accesible gameplay
 def alienFire1():
     if len(enemies) >= 1:
         p1 = Rect((enemies[0][0].x, enemies[0][0].y), (5, 10))
@@ -181,6 +189,7 @@ def alienFire3():
         if soundOn:
             sounds.laser2.play()
 
+#Allowing the projectiles to dissapear once they have been hit once
 
 def updateAlienProjectiles():
     global lives
@@ -195,7 +204,7 @@ def updateAlienProjectiles():
         if p.bottom >= HEIGHT:
             alienProjectiles.remove(p)
 
-
+#move the aliens back in place
 def resetAliens():
     enemies.clear()
 
@@ -227,6 +236,8 @@ def moveAliens():
         for s in range(len(enemies[e])):
             enemies[e][s].x += enemies[e][s].xspeed
 
+#keeping the enemies on the screen while checking htier collsion with the boundaries of the game
+
 def checkCollision():
     for e in enemies:
         if e[0].left <= 0:
@@ -234,6 +245,7 @@ def checkCollision():
 
         if e[len(e) - 1].right >= WIDTH:
             changeDirection()
+
 
 def changeDirection():
     for e in range(len(enemies)):
@@ -244,6 +256,7 @@ def changeDirection():
 def moveProjectile():
     projectile.y -= 10
 
+#check to see if the player's bullet has hit the enemy
 def checkProjectileCollision():
     global fired, score
 
@@ -261,6 +274,7 @@ def checkProjectileCollision():
     if projectile.top <= 0:
         fired = False
 
+#want to make sure that if the shield is hit the game knows and the player is not affected
 def checkShieldCollision():
     global fired
 
@@ -274,7 +288,7 @@ def checkShieldCollision():
                 s.inflate_ip(-3, -1)
                 alienProjectiles.remove(p)
 
-
+#update runs on the funcitonaltity of the boolean function "GameState", the fucntions created above will be called occrdingly for an optimial organization of code
 def update():
     global gameState, lives
 
